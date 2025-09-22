@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-800">Edições Anteriores</h2>
+            <p class="text-lg text-gray-600 mt-2">Explore as fotos e vídeos de cada evento.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+            
+            {% for edition in page_obj %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+                
+                <div class="p-6 flex-grow">
+                    <h3 class="font-bold text-lg text-gray-800">{{ edition.edition_name }}</h3>
+                    <p class="text-gray-600 my-2 text-sm">
+                        {{ edition.edition_description }}
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 border-t border-gray-200">
+                    
+                    <div class="text-center">
+                        <a href="{% url 'photo-list-by-edition' edition.edition_name %}">
+                            <img class="w-full" src="{{ edition.preview_image1.url }}" alt="Preview for photos">
+                        </a>
+                        <p class="text-xs text-gray-500 py-2 bg-gray-50">Fotos</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <a href="{% url 'video-list-by-edition' edition.edition_name %}">
+                            <img class="w-full" src="{{ edition.preview_image2.url }}" alt="Preview for videos">
+                        </a>
+                        <p class="text-xs text-gray-500 py-2 bg-gray-50">Vídeos</p>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+            </div>
+    </div>
+</section>
+        <div class="mt-12">
+            {% include 'components/pagination.html' %}
+        </div>
+{% endblock content %}

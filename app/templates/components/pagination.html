@@ -1,0 +1,32 @@
+<section class="py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <nav class="flex justify-between items-center" aria-label="Pagination">
+            
+            <div>
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 shadow-sm">
+                        Anterior
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="hidden sm:block">
+                <p class="text-sm text-gray-700">
+                    Página
+                    <span class="font-medium">{{ page_obj.number }}</span>
+                    de
+                    <span class="font-medium">{{ page_obj.paginator.num_pages }}</span>
+                </p>
+            </div>
+
+            <div>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 shadow-sm">
+                        Próxima
+                    </a>
+                {% endif %}
+            </div>
+
+        </nav>
+    </div>
+</section>

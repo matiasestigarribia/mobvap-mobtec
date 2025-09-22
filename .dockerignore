@@ -1,0 +1,17 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Database
+db.sqlite3
+
+# Docker
+Dockerfile
+docker-compose.yml
+apt-entity-472912-v8-ed495a2e171a.json

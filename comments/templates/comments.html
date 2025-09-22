@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section x-data="{ isSubmitting: false }" class="py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto">
+        
+        <form action="" method="POST" @submit="isSubmitting = true" class="space-y-6">
+            
+            {% csrf_token %}
+
+            <div>
+                <label for="nome" class="block text-sm font-medium text-gray-700">Seu Nome</label>
+                <div class="mt-1">
+                    <input type="text" name="nome" id="nome" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                </div>
+            </div>
+
+            <div>
+                <label for="comentario" class="block text-sm font-medium text-gray-700">Seu Comentário</label>
+                <div class="mt-1">
+                    <textarea rows="4" name="comentario" id="comentario" required maxlength="900" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"></textarea>
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" 
+                        :disabled="isSubmitting"
+                        class="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400">
+                    
+                    <svg x-show="isSubmitting" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+
+                    <span x-show="!isSubmitting">Enviar Comentário</span>
+                </button>
+            </div>
+        </form>
+
+    </div>
+</section>
+<section>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
+    {% for comment in page_obj %}
+
+    {% if comment.comment_status == 'approved' %}
+
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+
+    <h3 class="font-bold text-lg text-gray-800">{{ comment.comment_author }}</h3>
+    <p class="text-gray-600 my-2">
+        {{ comment.comment_text }}
+    </p>
+    <p class="text-xs text-gray-400">
+        Postado em: {{ comment.created_at }}
+    </p>
+
+    </div>
+    {% endif %}
+    
+    {% endfor %}
+    
+
+</nav>
+
+</section>
+        <div class="mt-12">
+            {% include 'components/pagination.html' %}
+        </div>
+{% endblock %}
