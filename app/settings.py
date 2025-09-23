@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-$5u6p!qr0-d*$bg!!9*53-wrj(fub6uf!-e)+3g2wl@fxc!40g"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['35.185.116.64', 'www.mobvap-mobtec.work.gd', 'mobvap-mobtec.work.gd']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
