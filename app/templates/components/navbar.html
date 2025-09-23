@@ -1,11 +1,32 @@
-<nav class="flex items-center justify-between w-full">
-    <div>
-        <h2 class="text-xl font-bold text-white">MOBVAP-MOBTEC</h2>
+{% load static %}
+<nav x-data="{ open: false }" class="relative">
+    
+    <div class="flex items-center justify-between w-full">
+        
+        <div>
+            <h2 class="text-xl font-bold text-white">MOBVAP-MOBTEC</h2>
+        </div>
+        
+        <div class="hidden md:flex items-center gap-6">
+            <a href="{% url 'home-page' %}" class="text-base font-medium {% if active_nav == 'home' %}text-white underline font-semibold{% else %}text-blue-200 hover:text-white{% endif %}">Home</a>
+            <a href="{% url 'rules-page' %}" class="text-base font-medium {% if active_nav == 'rules' %}text-white underline font-semibold{% else %}text-blue-200 hover:text-white{% endif %}">Regulamento</a>
+            <a href="{% url 'editions-list' %}" class="text-base font-medium {% if active_nav == 'editions' %}text-white underline font-semibold{% else %}text-blue-200 hover:text-white{% endif %}">Edições</a>
+            <a href="{% url 'comments-page' %}" class="text-base font-medium {% if active_nav == 'comments' %}text-white underline font-semibold{% else %}text-blue-200 hover:text-white{% endif %}">Mural</a>
+        </div>
+        
+        <div class="md:hidden">
+            <button @click="open = !open" class="p-2 rounded-md text-blue-200 hover:text-white hover:bg-blue-700">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+
     </div>
-    <div class="flex items-center gap-6">
-        <a href="{% url 'home-page' %}" class="text-base font-medium text-blue-200 hover:text-white">Home</a>
-        <a href="{% url 'rules-page' %}" class="text-base font-medium text-blue-200 hover:text-white">Regulamento</a>
-        <a href="{% url 'editions-list' %}" class="text-base font-medium text-blue-200 hover:text-white">Edições</a>
-        <a href="{% url 'comments-page' %}" class="text-base font-medium text-blue-200 hover:text-white">Mural</a>
+    
+    <div x-show="open" @click.away="open = false" class="md:hidden absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20">
+        <a href="{% url 'home-page' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Home</a>
+        <a href="{% url 'rules-page' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Regulamento</a>
+        <a href="{% url 'editions-list' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edições</a>
+        <a href="{% url 'comments-page' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mural</a>
     </div>
+
 </nav>
