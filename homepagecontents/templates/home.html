@@ -16,11 +16,17 @@
             <h1 class="text-4xl sm:text-5xl font-bold text-[var(--dark-navy)] mb-6 text-center">{{ home_content.home_title }}</h1>
             <img src="{% static 'images/general/mobtec-logo.jpg' %}" alt="MOBTEC Logo" class="h-32 w-32 object-contain">
         </div>
-        <div class="w-full max-w-4xl mx-auto border-4 border-[var(--light-blue)] rounded-lg overflow-hidden shadow-lg">
-            <div class="aspect-video">
-                <iframe width="560" height="315" src= {{ home_content.youtube_url }} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </div>
+        <div class="w-full max-w-4xl mx-auto border-4 border-blue-300 rounded-lg overflow-hidden shadow-lg">
+        <div class="aspect-video">
+            <iframe class="w-full h-full" 
+                    src="{{ home_content.youtube_url }}" 
+                    title="YouTube video player" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+            </iframe>
         </div>
+</div>
     </section>
 
     <section class="py-12 px-4 sm:px-6 lg:px-8 bg-blue-50">
