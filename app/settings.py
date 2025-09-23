@@ -15,6 +15,8 @@ SECRET_KEY = "django-insecure-$5u6p!qr0-d*$bg!!9*53-wrj(fub6uf!-e)+3g2wl@fxc!40g
 DEBUG = False
 
 ALLOWED_HOSTS = ['35.185.116.64', 'www.mobvap-mobtec.work.gd', 'mobvap-mobtec.work.gd']
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = ['https://www.mobvap-mobtec.work.gd', 'https://mobvap-mobtec.work.gd']
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
