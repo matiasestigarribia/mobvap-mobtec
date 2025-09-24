@@ -12,7 +12,7 @@ This is the official web application for the MOBVAP-MOBTEC science fair, a real-
 * **Edition Archives:** A gallery system to showcase photos and videos from past events, with pagination.
 * **Automated Media Pipeline:**
     * User-uploaded images and videos are stored in a cloud object storage bucket (Google Cloud Storage).
-    * Video files are automatically processed with FFmpeg to create optimized versions and generate thumbnails.
+    * Video files are automatically generate thumbnails.
     * Thumbnails for both images and videos are processed with `django-imagekit` for uniform, high-quality previews.
 * **Interactive Comment Wall:** A public comment section with a loading spinner on submission and success messages.
 * **AI-Powered Content Moderation:** User-submitted comments are automatically analyzed by **Azure AI Content Safety**, and only approved comments are displayed.
