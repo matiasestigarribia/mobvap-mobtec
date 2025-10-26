@@ -18,7 +18,7 @@ class Edition(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['edition_name']
+        ordering = ['-created_at']
 
     def __str__(self):
         return self.edition_name

@@ -10,7 +10,6 @@ import tempfile
 from django.core.files import File
 
 def process_video(uploaded_file):
-    # This part is correct and doesn't need to change
     with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(uploaded_file.name)[1]) as temp_f:
         for chunk in uploaded_file.chunks():
             temp_f.write(chunk)
@@ -18,7 +17,6 @@ def process_video(uploaded_file):
 
     thumbnail_path = generate_thumbnail(temp_path)
 
-    # This part is also correct and doesn't need to change
     thumbnail_file = None
     if thumbnail_path and os.path.exists(thumbnail_path):
         thumbnail_file = File(
@@ -27,7 +25,6 @@ def process_video(uploaded_file):
         )
     uploaded_file.seek(0)
 
-    # Clean up the temporary files
     os.remove(temp_path)
     if thumbnail_path and os.path.exists(thumbnail_path):
         os.remove(thumbnail_path)
