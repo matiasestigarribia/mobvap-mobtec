@@ -32,29 +32,83 @@ This is the official web application for the MOBVAP-MOBTEC science fair, a real-
 * **Media Processing:** FFmpeg, `django-imagekit`
 
 ---
-## Local Setup & Installation
+## 🚀 Getting Started (Local Development)
 
-This project is fully containerized with Docker.
+You can run this project locally in two ways: **Native (Fast)** or **Docker (Production Parity)**.
+
+### Option 1: Native Setup (Recommended for Development)
+The fastest way to start coding. Uses SQLite and local file storage automatically.
 
 1.  **Clone the repository:**
     ```bash
     git clone [your-repo-url]
     cd [your-project-folder]
     ```
-2.  **Create your `.env` file:**
-    * Create a `.env` file in the root directory.
-    * Add your `SECRET_KEY`, database credentials, and cloud service keys.
 
-3.  **Build and run the containers:**
+2.  **Create and activate a Virtual Environment:**
+    ```bash
+    python -m venv venv
+    # Windows:
+    .\venv\Scripts\activate
+    # Linux/Mac:
+    source venv/bin/activate
+    ```
+
+3.  **Install Dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4.  **Run Migrations (Setup Database):**
+    ```bash
+    python manage.py migrate
+    ```
+
+5.  **Run the Server:**
+    ```bash
+    python manage.py runserver
+    ```
+    Access at `http://localhost:8000`.
+    *Note: By default, the project runs in `dev` mode. To enable detailed error pages, create a `.env` file with `DEBUG=True`.*
+
+---
+
+### Option 2: Docker Setup (Simulating Production)
+Use this to test the production stack (PostgreSQL, Nginx, Gunicorn) or if you don't want to install Python locally.
+
+1.  **Create your `.env` file:**
+    Copy the example file and adjust if necessary (Docker requires the DB credentials).
+    ```bash
+    cp .env.example .env
+    ```
+
+2.  **Build and run:**
     ```bash
     docker-compose up --build -d
     ```
-4.  **Run database migrations:**
+
+3.  **Setup (First run only):**
     ```bash
     docker-compose exec web python manage.py migrate
-    ```
-5.  **Create a superuser:**
-    ```bash
     docker-compose exec web python manage.py createsuperuser
     ```
-6.  The application will be available at `http://localhost`.
+
+The application will be available at `http://localhost`.
+
+---
+
+## ⚙️ Configuration & Environments
+
+The project switches behavior based on the `DJANGO_ENV` environment variable in `settings.py`.
+
+| Feature | Development (`dev`) | Production (`prd`) |
+| :--- | :--- | :--- |
+| **Database** | SQLite (local file) | PostgreSQL |
+| **Storage** | Local File System (`/media`) | Google Cloud Storage |
+| **Security** | Relaxed (HTTP allowed) | Strict (HTTPS enforced, Secure Cookies) |
+| **Static Files** | Served by Django | Served by GCS / Nginx |
+
+To simulate production behavior locally (e.g., to test strict security or GCS upload):
+1.  Set `DJANGO_ENV=prd` in your `.env`.
+2.  Set `DEBUG=False`.
+3.  Use Docker recommended.
