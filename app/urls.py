@@ -25,7 +25,6 @@ urlpatterns = [
     path('editions/<str:edition_name>/videos/', VideoListView.as_view(), name='video-list-by-edition'),
 ]
 
-if settings.DEBUG and settings.STATICFILES_DIRS:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS)
-
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG or getattr(settings, 'ENVIRONMENT', None) == 'dev':
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
