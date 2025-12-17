@@ -16,8 +16,9 @@ jobs:
       DJANGO_ENV: dev
       DEBUG: True
       SECRET_KEY: 'django-insecure-test-key-github-actions'
-      # Não precisamos de credenciais reais da Azure/DB aqui
-      # porque seus testes usam Mocks e SQLite!
+      CONTENT_SAFETY_KEY: 'dummy-key-for-ci-only'
+      CONTENT_SAFETY_ENDPOINT: 'https://dummy-endpoint.azure.com'
+    
 
     steps:
     # 1. Baixa seu código
