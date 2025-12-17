@@ -4,11 +4,6 @@ import tempfile
 from django.core.files import File
 
 
-import ffmpeg
-import os
-import tempfile
-from django.core.files import File
-
 def process_video(uploaded_file):
     with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(uploaded_file.name)[1]) as temp_f:
         for chunk in uploaded_file.chunks():
