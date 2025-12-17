@@ -1,0 +1,41 @@
+name: Django CI
+
+# Quando esse robô deve trabalhar?
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    # Define variáveis de ambiente para o teste não reclamar
+    env:
+      DJANGO_ENV: dev
+      DEBUG: True
+      SECRET_KEY: 'django-insecure-test-key-github-actions'
+      # Não precisamos de credenciais reais da Azure/DB aqui
+      # porque seus testes usam Mocks e SQLite!
+
+    steps:
+    # 1. Baixa seu código
+    - uses: actions/checkout@v3
+
+    # 2. Instala o Python
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.11"
+
+    # 3. Instala as bibliotecas
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # 4. Roda os Testes (O Grande Momento)
+    - name: Run Tests
+      run: |
+        python manage.py test
