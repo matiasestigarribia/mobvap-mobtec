@@ -40,7 +40,7 @@ class Command(BaseCommand):
             self.stdout.write(f'Founded {len(image_files)} images within zip. Importing images...')
         
             count = 0
-            for filename in files:
+            for filename in image_files:
                 simple_name = os.path.basename(filename)
                 
                 if not simple_name:
