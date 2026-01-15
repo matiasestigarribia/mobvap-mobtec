@@ -33,7 +33,7 @@ class Command(BaseCommand):
     
         try:
             with zipfile.ZipFile(zip_path, 'r') as z:
-                valid_extensions = ['.jpg', '.jpeg', '.png', '.webp']
+                valid_extensions = ('.jpg', '.jpeg', '.png', '.webp')
                 all_files = z.namelist()
                 image_files = [f for f in all_files if f.lower().endswith(valid_extensions) and not f.startswith('__MACOSX')]
         
