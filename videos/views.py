@@ -24,5 +24,9 @@ class VideoListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['edition_name'] = self.kwargs['edition_name']
+        
+        from editions.models import Edition
+        edition_obj = Edition.objects.filter(slug=self.kwargs['edition_name']).first()
+        context['edition_obj'] = edition_obj
         context['active_nav'] = 'editions'
         return context

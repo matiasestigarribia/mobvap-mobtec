@@ -22,8 +22,8 @@ urlpatterns = [
     path('rules/', RulesPageView.as_view(), name='rules-page'),
     path('comments/', CommentPageView.as_view(), name='comments-page'),
     path('editions/', EditionPageView.as_view(), name='editions-list'),
-    path('editions/<str:edition_name>/photos/', PhotoListView.as_view(), name='photo-list-by-edition'),
-    path('editions/<str:edition_name>/videos/', VideoListView.as_view(), name='video-list-by-edition'),
+    path('editions/<slug:edition_name>/photos/', PhotoListView.as_view(), name='photo-list-by-edition'),
+    path('editions/<slug:edition_name>/videos/', VideoListView.as_view(), name='video-list-by-edition'),
 ]
 
 if settings.DEBUG or getattr(settings, 'ENVIRONMENT', None) == 'dev':
