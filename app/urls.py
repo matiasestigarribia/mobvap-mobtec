@@ -18,6 +18,7 @@ urlpatterns = [
     path('api/v1/comments/', include('comments.urls')),
 
     path('home/', HomePageView.as_view(), name='home-page'),
+    path('', HomePageView.as_view(), name='index'),
     path('rules/', RulesPageView.as_view(), name='rules-page'),
     path('comments/', CommentPageView.as_view(), name='comments-page'),
     path('editions/', EditionPageView.as_view(), name='editions-list'),
