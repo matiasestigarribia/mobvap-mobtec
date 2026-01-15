@@ -24,14 +24,14 @@
                 <div class="grid grid-cols-2 border-t border-gray-200">
                     
                     <div class="text-center">
-                        <a href="{% url 'photo-list-by-edition' edition.edition_name %}">
+                        <a href="{% url 'photo-list-by-edition' edition.slug %}">
                             <img class="w-full" src="{{ edition.preview_image1.url }}" alt="Preview for photos">
                         </a>
                         <p class="text-xs text-gray-500 py-2 bg-gray-50">Fotos</p>
                     </div>
                     
                     <div class="text-center">
-                        <a href="{% url 'video-list-by-edition' edition.edition_name %}">
+                        <a href="{% url 'video-list-by-edition' edition.slug %}">
                             <img class="w-full" src="{{ edition.preview_image2.url }}" alt="Preview for videos">
                         </a>
                         <p class="text-xs text-gray-500 py-2 bg-gray-50">Vídeos</p>
