@@ -37,28 +37,28 @@ class Command(BaseCommand):
                 all_files = z.namelist()
                 image_files = [f for f in all_files if f.lower().endswith(valid_extensions) and not f.startswith('__MACOSX')]
         
-            self.stdout.write(f'Founded {len(image_files)} images within zip. Importing images...')
-        
-            count = 0
-            for filename in image_files:
-                simple_name = os.path.basename(filename)
-                
-                if not simple_name:
-                    continue
-                    
-                try:
-                    file_content = z.read(filename)
-                    photo= Photo(
-                        image_title=simple_name,
-                        image_description=description,
-                        edition=edition,
-                    )
-                    photo.image_file.save(simple_name, ContentFile(file_content), save=True)
-                    count += 1
-                    self.stdout.write(f'Saved: {simple_name}')
-                except Exception as e:
-                    self.stdout.write(self.style.ERROR(f'Failed saving {simple_name}: {e}'))
+                self.stdout.write(f'Founded {len(image_files)} images within zip. Importing images...')
             
-            self.stdout.write(self.style.SUCCESS(f'Concluded! {count} imported photos'))
+                count = 0
+                for filename in image_files:
+                    simple_name = os.path.basename(filename)
+                    
+                    if not simple_name:
+                        continue
+                        
+                    try:
+                        file_content = z.read(filename)
+                        photo= Photo(
+                            image_title=simple_name,
+                            image_description=description,
+                            edition=edition,
+                        )
+                        photo.image_file.save(simple_name, ContentFile(file_content), save=True)
+                        count += 1
+                        self.stdout.write(f'Saved: {simple_name}')
+                    except Exception as e:
+                        self.stdout.write(self.style.ERROR(f'Failed saving {simple_name}: {e}'))
+                
+                self.stdout.write(self.style.SUCCESS(f'Concluded! {count} imported photos'))
         except zipfile.BadZipFile:
             self.stdout.write(self.style.ERROR('Zip file not valid or corrupted'))
