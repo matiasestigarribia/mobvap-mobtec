@@ -20,7 +20,7 @@ class PhotoListView(ListView):
     paginate_by = 15
 
     def get_queryset(self):
-        return Photo.objects.filter(edition_slug=self.kwargs['edition_name'])
+        return Photo.objects.filter(edition__slug=self.kwargs['edition_name'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
