@@ -3,72 +3,77 @@
 
 
 {% block title %}
-    
-        {{ home_content.home_title }} - MOBVAP-MOBTEC 
-    
+
+{{ home_content.home_title }} - MOBVAP-MOBTEC
+
 {% endblock title %}
 
 {% block content %}
 
-    <section class="flex flex-col items-center justify-center pt-2 pb-12 px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center w-full max-w-4xl mx-auto">
-            <img src="{% static 'images/general/mobvap-logo1.png' %}" alt="MOBVAP Logo" class="h-32 w-32 object-contain">
+<section
+    class="flex flex-col items-center justify-center bg-gradient-to-b from-slate-50 to-white pt-8 pb-16 px-6 sm:px-8 lg:px-12">
+    <div class="flex justify-between items-center w-full max-w-4xl mx-auto">
+        <img src="{% static 'images/general/mobvap-logo1.png' %}" alt="MOBVAP Logo" class="h-32 w-32 object-contain">
             <h1 class="text-4xl sm:text-5xl font-bold text-[var(--dark-navy)] mb-6 text-center">{{ home_content.home_title }}</h1>
-            <img src="{% static 'images/general/mobtec-logo1.png' %}" alt="MOBTEC Logo" class="h-32 w-32 object-contain">
-        </div>
-        <div class="w-full max-w-4xl mx-auto border-4 border-blue-300 rounded-lg overflow-hidden shadow-lg">
+        <img src="{% static 'images/general/mobtec-logo1.png' %}" alt="MOBTEC Logo" class="h-32 w-32 object-contain">
+    </div>
+    <div
+        class="w-full max-w-4xl mx-auto border-4 border-blue-600 rounded-xl overflow-hidden shadow-2xl hover:shadow-blue-600/20 transition-shadow duration-300">
         <div class="aspect-video">
-            <iframe class="w-full h-full" 
-                    src="{{ home_content.youtube_url }}" 
-                    title="YouTube video player" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    allowfullscreen
-                    referrerpolicy="strict-origin-when-cross-origin">
+            <iframe class="w-full h-full" src="{{ home_content.youtube_url }}" title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen referrerpolicy="strict-origin-when-cross-origin">
             </iframe>
         </div>
-</div>
-    </section>
-
-    <section class="py-12 px-4 sm:px-6 lg:px-8 bg-blue-50">
-    <div class="max-w-4xl mx-auto text-center">
-        <h2 class="text-3xl font-bold text-[var(--dark-navy)] mb-4">{{ home_content.block_content1_title }}</h2>
-        
-        <p class="text-lg text-[var(--dark-navy)] leading-relaxed font-['Inter']">{{ home_content.block_content1_text }}</p>
     </div>
-    </section>
+</section>
 
-    <section class="py-16 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-3xl font-bold text-center text-[var(--dark-navy)] mb-8">{{ home_content.block_content2_title }}</h2>
-            <p class="text-lg text-[var(--dark-navy)] leading-relaxed font-['Inter']">{{ home_content.block_content2_text }}</p>
-        </div>
-    </section>
 
-    <section>
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-3xl font-bold text-center text-[var(--dark-navy)] mb-8" >{{ home_content.schedule_table_title }} </h2>
-             <div class="overflow-x-auto rounded-lg shadow-md ">
-                {{ home_content.schedule_table_html|safe }}
+<section class="py-16 px-6 sm:px-8 lg:px-12 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800">
+    <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl font-bold text-white mb-4">{{ home_content.block_content1_title }}</h2>
+        <div class="prose prose-slate prose-lg max-w-none text-white/95">{{ home_content.block_content1_text|safe }}
         </div>
-        </div>
-    </section>
+    </div>
+</section>
 
-    <section class="py-12 px-4 sm:px-6 lg:px-8 bg-blue-50">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-3xl font-bold text-center text-[var(--dark-navy)] mb-8">{{ home_content.block_content3_title }}</h2>
-            <p class="text-lg text-[var(--dark-navy)] leading-relaxed font-['Inter']">{{ home_content.block_content3_text|safe }}</p>
-        
+<section class="py-16 px-6 sm:px-8 lg:px-12 bg-white">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-[var(--dark-navy)] mb-8">{{ home_content.block_content2_title }}
+        </h2>
+        <div class="prose prose-slate prose-lg max-w-none">{{ home_content.block_content2_text|safe }}</div>
+    </div>
+</section>
 
+<section class="py-16 px-6 sm:px-8 lg:px-12 bg-gradient-to-b from-slate-100 to-slate-50">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-[var(--dark-navy)] mb-8">{{ home_content.schedule_table_title }}
+        </h2>
+        <div class="overflow-x-auto rounded-lg shadow-md ">
+            {{ home_content.schedule_table_html|safe }}
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="py-16 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-3xl font-bold text-center text-[var(--dark-navy)] mb-8">{{ home_content.block_content4_title }}</h2>
-            <p class="text-lg text-[var(--dark-navy)] leading-relaxed font-['Inter']">{{ home_content.block_content4_text|safe }}</p>
-           
+<section class="py-16 px-6 sm:px-8 lg:px-12 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-white mb-8">{{ home_content.block_content3_title }}
+        </h2>
+        <div class="prose prose-slate prose-lg max-w-none text-white/95">{{ home_content.block_content3_text|safe }}
         </div>
-    </section>
+
+
+    </div>
+</section>
+
+<section class="py-16 px-6 sm:px-8 lg:px-12 bg-white">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-[var(--dark-navy)] mb-8">{{ home_content.block_content4_title }}
+        </h2>
+        <div class="prose prose-slate prose-lg max-w-none">{{ home_content.block_content4_text|safe }}</div>
+
+    </div>
+</section>
 
 {% endblock content %}
