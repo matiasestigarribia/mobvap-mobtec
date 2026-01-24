@@ -1,29 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section class="py-12 px-4 sm:px-6 lg:px-8 bg-slate-50">
+<section class="py-16 px-6 sm:px-8 lg:px-12 bg-gradient-to-b from-slate-50 to-white">
     <div class="max-w-7xl mx-auto">
 
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-800">Fotos da Edição: {{ edition_name }}</h2>
-            <p class="text-lg text-gray-600 mt-2">Navegue pela galeria de imagens do evento.</p>
+            <h2 class="text-4xl font-extrabold text-slate-900 tracking-tight">Fotos da Edição: {{ edition_name }}</h2>
+            <p class="text-lg text-slate-600 mt-4">Navegue pela galeria de imagens do evento.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            
+
             {% for photo in photos %}
-            <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl">
-                
-                <a target="_blank" href="{{photo.image_file.url}}">
-                <img class="w-full" src="{{ photo.image_file.url }}" alt="{{ photo.image_title }}">
+            <div
+                class="bg-white rounded-xl shadow-lg hover:shadow-2xl hover:shadow-blue-600/10 transition-all duration-300 overflow-hidden border border-slate-100 border-t-4 border-t-blue-600 border-l-2 border-l-blue-600/50 border-r-2 border-r-blue-600/50 border-b-2 border-b-blue-600/50">
+
+                <a target="_blank" href="{{photo.image_file.url}}" class="block overflow-hidden">
+                    <img class="w-full hover:scale-105 transition-transform duration-300"
+                        src="{{ photo.image_file.url }}" alt="{{ photo.image_title }}">
                 </a>
-                
 
             </div>
             {% empty %}
-                <div class="col-span-full text-center py-12">
-                    <p class="text-lg text-gray-600">Desculpa, essa edição ainda não possui fotos.</p>
-                </div>
+            <div class="col-span-full text-center py-12">
+                <p class="text-lg text-slate-600">Desculpa, essa edição ainda não possui fotos.</p>
+            </div>
             {% endfor %}
 
         </div>
