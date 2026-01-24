@@ -4,3 +4,4 @@
 .flake8
 db.sqlite3
 apt-entity-472912-v8-ed495a2e171a.json
+**/__pycache__
