@@ -43,6 +43,8 @@ module.exports = {
     'border-l-blue-600/50',
     'border-r-2',
     'border-r-blue-600/50',
+    'border-b-2',
+    'border-b-blue-600/50',
     'backdrop-blur-sm',
     'tracking-wider',
     'tracking-tight',
