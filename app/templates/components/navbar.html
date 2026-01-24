@@ -1,34 +1,74 @@
 {% load static %}
-<nav x-data="{ open: false }" class="relative">
-    
-    <div class="flex items-center justify-between w-full">
-        
-        <div>
-            <a href="{% url 'home-page' %}">
-                <h2 class="text-xl font-bold text-white">MOBVAP-MOBTEC</h2>
-            </a>
-        </div>
-        
-        <div class="hidden md:flex items-center gap-6">
-            <a href="{% url 'home-page' %}" class="text-base font-medium {% if active_nav == 'home' %}text-white underline font-semibold{% else %}text-blue-200 hover:text-white{% endif %}">Home</a>
-            <a href="{% url 'rules-page' %}" class="text-base font-medium {% if active_nav == 'rules' %}text-white underline font-semibold{% else %}text-blue-200 hover:text-white{% endif %}">Regulamento</a>
-            <a href="{% url 'editions-list' %}" class="text-base font-medium {% if active_nav == 'editions' %}text-white underline font-semibold{% else %}text-blue-200 hover:text-white{% endif %}">Edições</a>
-            <a href="{% url 'comments-page' %}" class="text-base font-medium {% if active_nav == 'comments' %}text-white underline font-semibold{% else %}text-blue-200 hover:text-white{% endif %}">Mural</a>
-        </div>
-        
-        <div class="md:hidden">
-            <button @click="open = !open" class="p-2 rounded-md text-blue-200 hover:text-white hover:bg-blue-700">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-        </div>
+<nav x-data="{ open: false }" class="bg-gradient-to-r from-blue-800 to-blue-900 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
 
-    </div>
-    
-    <div x-show="open" @click.away="open = false" class="md:hidden absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20">
-        <a href="{% url 'home-page' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Home</a>
-        <a href="{% url 'rules-page' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Regulamento</a>
-        <a href="{% url 'editions-list' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edições</a>
-        <a href="{% url 'comments-page' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mural</a>
+            <div class="flex-shrink-0">
+                <a href="{% url 'home-page' %}"
+                    class="text-2xl font-bold text-white tracking-wider hover:text-blue-200 transition-colors">
+                    MOBVAP-MOBTEC
+                </a>
+            </div>
+
+            <div class="hidden md:block">
+                <div class="ml-10 flex items-baseline space-x-8">
+                    <a href="{% url 'home-page' %}"
+                        class="px-3 py-2 rounded-md text-sm font-semibold transition-all duration-200 
+                       {% if active_nav == 'home' %} text-white bg-white/20 {% else %} text-white/90 hover:text-white hover:bg-white/10 {% endif %}">
+                        Home
+                    </a>
+                    <a href="{% url 'rules-page' %}"
+                        class="px-3 py-2 rounded-md text-sm font-semibold transition-all duration-200 
+                       {% if active_nav == 'rules' %} text-white bg-white/20 {% else %} text-white/90 hover:text-white hover:bg-white/10 {% endif %}">
+                        Regulamento
+                    </a>
+                    <a href="{% url 'editions-list' %}"
+                        class="px-3 py-2 rounded-md text-sm font-semibold transition-all duration-200 
+                       {% if active_nav == 'editions' %} text-white bg-white/20 {% else %} text-white/90 hover:text-white hover:bg-white/10 {% endif %}">
+                        Edições
+                    </a>
+                    <a href="{% url 'comments-page' %}"
+                        class="px-3 py-2 rounded-md text-sm font-semibold transition-all duration-200 
+                       {% if active_nav == 'comments' %} text-white bg-white/20 {% else %} text-white/90 hover:text-white hover:bg-white/10 {% endif %}">
+                        Mural
+                    </a>
+                </div>
+            </div>
+
+            <div class="-mr-2 flex md:hidden">
+                <button @click="open = !open" type="button"
+                    class="bg-blue-800/50 inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-800 focus:ring-white transition-all"
+                    aria-controls="mobile-menu" aria-expanded="false">
+                    <span class="sr-only">Open main menu</span>
+                    <svg :class="{'hidden': open, 'block': !open }" class="block h-6 w-6"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg :class="{'block': open, 'hidden': !open }" class="hidden h-6 w-6"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
     </div>
 
+    <div x-show="open" x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-2"
+        class="md:hidden bg-blue-900/95 backdrop-blur-sm border-t border-blue-700/50" id="mobile-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="{% url 'home-page' %}"
+                class="block px-3 py-2 rounded-md text-base font-semibold text-white hover:bg-white/10 transition-all">Home</a>
+            <a href="{% url 'rules-page' %}"
+                class="block px-3 py-2 rounded-md text-base font-semibold text-white hover:bg-white/10 transition-all">Regulamento</a>
+            <a href="{% url 'editions-list' %}"
+                class="block px-3 py-2 rounded-md text-base font-semibold text-white hover:bg-white/10 transition-all">Edições</a>
+            <a href="{% url 'comments-page' %}"
+                class="block px-3 py-2 rounded-md text-base font-semibold text-white hover:bg-white/10 transition-all">Mural</a>
+        </div>
+    </div>
 </nav>
