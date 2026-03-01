@@ -1,5 +1,5 @@
 {% load static %}
-<nav x-data="{ open: false }" class="relative z-50 bg-[#0f172a] border-b border-white/5 shadow-xl">
+<nav x-data="{ open: false }" aria-label="Navegação principal" class="relative z-50 bg-[#0f172a] border-b border-white/5 shadow-xl">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-20">
 
@@ -13,22 +13,26 @@
             <div class="hidden md:block">
                 <div class="ml-10 flex items-baseline space-x-8">
                     <a href="{% url 'home-page' %}"
-                        class="px-3 py-2 rounded-md text-sm font-semibold transition-all duration-200 
+                        {% if active_nav == 'home' %}aria-current="page"{% endif %}
+                        class="px-3 py-2 rounded-md text-sm font-semibold transition-all duration-200
                         {% if active_nav == 'home' %} text-white bg-white/10 {% else %} text-gray-300 hover:text-white hover:bg-white/5 {% endif %}">
-                        Home
+                        Início
                     </a>
                     <a href="{% url 'rules-page' %}"
-                        class="px-3 py-2 rounded-md text-sm font-semibold transition-all duration-200 
+                        {% if active_nav == 'rules' %}aria-current="page"{% endif %}
+                        class="px-3 py-2 rounded-md text-sm font-semibold transition-all duration-200
                         {% if active_nav == 'rules' %} text-white bg-white/10 {% else %} text-gray-300 hover:text-white hover:bg-white/5 {% endif %}">
                         Regulamento
                     </a>
                     <a href="{% url 'editions-list' %}"
-                        class="px-3 py-2 rounded-md text-sm font-semibold transition-all duration-200 
+                        {% if active_nav == 'editions' %}aria-current="page"{% endif %}
+                        class="px-3 py-2 rounded-md text-sm font-semibold transition-all duration-200
                         {% if active_nav == 'editions' %} text-white bg-white/10 {% else %} text-gray-300 hover:text-white hover:bg-white/5 {% endif %}">
                         Edições
                     </a>
                     <a href="{% url 'comments-page' %}"
-                        class="px-3 py-2 rounded-md text-sm font-semibold transition-all duration-200 
+                        {% if active_nav == 'comments' %}aria-current="page"{% endif %}
+                        class="px-3 py-2 rounded-md text-sm font-semibold transition-all duration-200
                         {% if active_nav == 'comments' %} text-white bg-white/10 {% else %} text-gray-300 hover:text-white hover:bg-white/5 {% endif %}">
                         Mural
                     </a>
@@ -38,7 +42,7 @@
             <div class="-mr-2 flex md:hidden">
                 <button @click="open = !open" type="button"
                     class="inline-flex items-center justify-center p-2 rounded-md text-white bg-white/5 border border-white/10 hover:bg-white/10 focus:outline-none transition-all"
-                    aria-controls="mobile-menu" aria-expanded="false">
+                    aria-controls="mobile-menu" :aria-expanded="open.toString()">
                     <span class="sr-only">Open main menu</span>
                     <svg :class="{'hidden': open, 'block': !open }" class="block h-6 w-6"
                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -55,31 +59,39 @@
         </div>
     </div>
 
-    <div x-show="open" 
+    <div x-show="open"
         x-transition:enter="transition ease-out duration-200"
-        x-transition:enter-start="opacity-0 -translate-y-2" 
+        x-transition:enter-start="opacity-0 -translate-y-2"
         x-transition:enter-end="opacity-100 translate-y-0"
-        x-transition:leave="transition ease-in duration-150" 
+        x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100 translate-y-0"
         x-transition:leave-end="opacity-0 -translate-y-2"
-        class="md:hidden absolute top-full left-0 w-full z-50 bg-[#0f172a] shadow-2xl border-b border-white/5" 
+        class="md:hidden absolute top-full left-0 w-full z-50 bg-[#0f172a] shadow-2xl border-b border-white/5"
         id="mobile-menu">
-        
+
         <div class="px-0 py-0">
             <a href="{% url 'home-page' %}"
-                class="block px-6 py-5 text-base font-medium text-gray-300 hover:text-white hover:bg-white/5 border-b border-white/5 transition-all duration-200">
-                Home
+                {% if active_nav == 'home' %}aria-current="page"{% endif %}
+                class="block px-6 py-5 text-base font-medium border-b border-white/5 transition-all duration-200
+                {% if active_nav == 'home' %} text-white bg-white/10 {% else %} text-gray-300 hover:text-white hover:bg-white/5 {% endif %}">
+                Início
             </a>
             <a href="{% url 'rules-page' %}"
-                class="block px-6 py-5 text-base font-medium text-gray-300 hover:text-white hover:bg-white/5 border-b border-white/5 transition-all duration-200">
+                {% if active_nav == 'rules' %}aria-current="page"{% endif %}
+                class="block px-6 py-5 text-base font-medium border-b border-white/5 transition-all duration-200
+                {% if active_nav == 'rules' %} text-white bg-white/10 {% else %} text-gray-300 hover:text-white hover:bg-white/5 {% endif %}">
                 Regulamento
             </a>
             <a href="{% url 'editions-list' %}"
-                class="block px-6 py-5 text-base font-medium text-gray-300 hover:text-white hover:bg-white/5 border-b border-white/5 transition-all duration-200">
+                {% if active_nav == 'editions' %}aria-current="page"{% endif %}
+                class="block px-6 py-5 text-base font-medium border-b border-white/5 transition-all duration-200
+                {% if active_nav == 'editions' %} text-white bg-white/10 {% else %} text-gray-300 hover:text-white hover:bg-white/5 {% endif %}">
                 Edições
             </a>
             <a href="{% url 'comments-page' %}"
-                class="block px-6 py-5 text-base font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-200">
+                {% if active_nav == 'comments' %}aria-current="page"{% endif %}
+                class="block px-6 py-5 text-base font-medium transition-all duration-200
+                {% if active_nav == 'comments' %} text-white bg-white/10 {% else %} text-gray-300 hover:text-white hover:bg-white/5 {% endif %}">
                 Mural
             </a>
         </div>

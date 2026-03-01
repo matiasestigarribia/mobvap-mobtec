@@ -1,56 +1,128 @@
 {% extends 'base.html' %}
+{% block meta_description %}<meta name="description" content="Explore as edições anteriores do MOBVAP-MOBTEC — galeria de fotos e vídeos de cada evento.">{% endblock meta_description %}
+
+{% block title %}Edições Anteriores - MOBVAP-MOBTEC{% endblock title %}
 
 {% block content %}
-<section class="py-16 px-6 sm:px-8 lg:px-12 bg-gradient-to-b from-slate-50 to-white">
+
+{# ── PAGE HEADER ── Flat slate-50 background, consistent with home content sections #}
+<section class="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-slate-50">
     <div class="max-w-7xl mx-auto">
 
-        <div class="text-center mb-12">
-            <h2 class="text-4xl font-extrabold text-slate-900 tracking-tight">Edições Anteriores</h2>
-            <p class="text-lg text-slate-600 mt-4">Explore as fotos e vídeos de cada evento.</p>
+        {# Prestige badge + h1 + divider + subtitle — matches pattern from all other pages #}
+        <div class="text-center mb-12 md:mb-16">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full
+                         bg-blue-100 text-blue-700
+                         text-xs font-semibold tracking-widest uppercase mb-5">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block"></span>
+                MOBVAP-MOBTEC
+            </span>
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">Edições Anteriores</h1>
+            <div class="mt-5 mb-5 mx-auto w-16 h-1 rounded-full bg-blue-600"></div>
+            <p class="text-lg text-slate-600 max-w-xl mx-auto">Explore as fotos e vídeos de cada edição da competição.</p>
         </div>
+
+        {% if page_obj %}
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
 
             {% for edition in page_obj %}
-            <div
-                class="bg-white rounded-xl shadow-lg hover:shadow-2xl hover:shadow-blue-600/10 transition-all duration-300 overflow-hidden flex flex-col border border-slate-100 border-t-4 border-t-blue-600 border-l-2 border-l-blue-600/50 border-r-2 border-r-blue-600/50">
+            <div class="bg-white rounded-xl
+                        border border-slate-200 border-t-4 border-t-blue-700
+                        shadow-sm hover:shadow-lg hover:shadow-blue-600/10
+                        transition-all duration-300
+                        overflow-hidden flex flex-col group">
 
                 <div class="p-6 flex-grow">
-                    <h3 class="font-bold text-xl text-slate-900 mb-2">{{ edition.edition_name }}</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
+                    <h2 class="font-bold text-xl text-slate-900 mb-2 group-hover:text-blue-700 transition-colors duration-200">
+                        {{ edition.edition_name }}
+                    </h2>
+                    <p class="text-slate-600 text-base leading-relaxed line-clamp-3">
                         {{ edition.edition_description }}
                     </p>
                 </div>
 
-                <div class="grid grid-cols-2 border-t border-slate-200">
+                <div class="grid grid-cols-2 border-t border-slate-100">
 
-                    <div class="text-center group">
-                        <a href="{% url 'photo-list-by-edition' edition.slug %}" class="block overflow-hidden">
-                            <img class="w-full hover:scale-105 transition-transform duration-300"
-                                src="{{ edition.preview_image1.url }}" alt="Preview for photos">
+                    <div class="overflow-hidden">
+                        <a href="{% url 'photo-list-by-edition' edition.slug %}"
+                           class="group/thumb block relative"
+                           aria-label="Ver fotos da edição {{ edition.edition_name }}">
+                            <div class="aspect-[4/3] overflow-hidden bg-slate-100">
+                                <img class="w-full h-full object-cover transition-transform duration-300 group-hover/thumb:scale-105"
+                                     src="{{ edition.preview_image1.url }}"
+                                     alt="Prévia de fotos da edição {{ edition.edition_name }}"
+                                     loading="lazy">
+                            </div>
+                            <div class="absolute inset-0 bg-blue-900/60
+                                        opacity-0 group-hover/thumb:opacity-100
+                                        transition-opacity duration-300
+                                        flex items-center justify-center gap-1.5">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                                <span class="text-white text-xs font-semibold">Fotos</span>
+                            </div>
                         </a>
-                        <p
-                            class="text-xs font-semibold text-white py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all cursor-pointer">
-                            Fotos</p>
                     </div>
 
-                    <div class="text-center group">
-                        <a href="{% url 'video-list-by-edition' edition.slug %}" class="block overflow-hidden">
-                            <img class="w-full hover:scale-105 transition-transform duration-300"
-                                src="{{ edition.preview_image2.url }}" alt="Preview for videos">
+                    <div class="overflow-hidden border-l border-slate-100">
+                        <a href="{% url 'video-list-by-edition' edition.slug %}"
+                           class="group/thumb block relative"
+                           aria-label="Ver vídeos da edição {{ edition.edition_name }}">
+                            <div class="aspect-[4/3] overflow-hidden bg-slate-100">
+                                <img class="w-full h-full object-cover transition-transform duration-300 group-hover/thumb:scale-105"
+                                     src="{{ edition.preview_image2.url }}"
+                                     alt="Prévia de vídeos da edição {{ edition.edition_name }}"
+                                     loading="lazy">
+                            </div>
+                            <div class="absolute inset-0 bg-blue-900/60
+                                        opacity-0 group-hover/thumb:opacity-100
+                                        transition-opacity duration-300
+                                        flex items-center justify-center gap-1.5">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                          d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                          clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-white text-xs font-semibold">Vídeos</span>
+                            </div>
                         </a>
-                        <p
-                            class="text-xs font-semibold text-white py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all cursor-pointer">
-                            Vídeos</p>
                     </div>
 
                 </div>
             </div>
             {% endfor %}
         </div>
+
+        <div class="mt-12">
+            {% include 'components/pagination.html' %}
+        </div>
+
+        {% else %}
+
+        {# ── EMPTY STATE ── Polished, encouraging, on-brand #}
+        <div class="text-center py-20">
+            <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-blue-50
+                        border border-blue-100
+                        flex items-center justify-center">
+                <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                     aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-3">Nenhuma edição disponível</h2>
+            <p class="text-slate-500 text-base max-w-sm mx-auto leading-relaxed">
+                As edições anteriores serão publicadas em breve. Volte em breve para explorar a galeria completa.
+            </p>
+        </div>
+
+        {% endif %}
+
     </div>
 </section>
-<div class="mt-12">
-    {% include 'components/pagination.html' %}
-</div>
+
 {% endblock content %}

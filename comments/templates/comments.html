@@ -1,48 +1,86 @@
 {% extends "base.html" %}
+{% block meta_description %}<meta name="description" content="Mural de comentários do MOBVAP-MOBTEC — leia o que a comunidade tem a dizer e deixe o seu comentário.">{% endblock meta_description %}
+
+{% block title %}Mural - MOBVAP-MOBTEC{% endblock title %}
 
 {% block content %}
 
-<section x-data="{ isSubmitting: false }" class="py-16 px-6 sm:px-8 lg:px-12 bg-gradient-to-b from-slate-50 to-white">
-    <div class="max-w-2xl mx-auto">
+{# ── COMMENT FORM SECTION ── Hero-style header + elegant form card #}
+<section x-data="{ isSubmitting: false }"
+         class="relative py-20 md:py-28 px-4 sm:px-6 lg:px-8
+                bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900
+                overflow-hidden">
 
-        <!-- Form Card -->
-        <div
-            class="bg-white p-8 rounded-xl shadow-lg border border-slate-100 border-t-4 border-t-blue-600 border-l-2 border-l-blue-600/50 border-r-2 border-r-blue-600/50 border-b-2 border-b-blue-600/50">
+    {# Decorative grid overlay #}
+    <div class="absolute inset-0 opacity-5 pointer-events-none"
+         style="background-image: linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px),
+                                  linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px);
+                background-size: 40px 40px;">
+    </div>
+
+    <div class="relative max-w-xl mx-auto">
+
+        {# Section heading on dark hero background #}
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full
+                        bg-blue-500/20 border border-blue-400/30
+                        text-blue-300 text-xs font-semibold tracking-widest uppercase mb-5">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-400 inline-block"></span>
+                Mural da Comunidade
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight mb-4">
+                Deixe seu Comentário
+            </h1>
+            <p class="text-slate-300 text-base leading-relaxed max-w-md mx-auto">
+                Compartilhe sua experiência com a nossa comunidade.
+                Comentários passam por moderação antes de serem publicados.
+            </p>
+        </div>
+
+        {# Form card — white, elevated, premium #}
+        <div class="bg-white rounded-2xl shadow-2xl shadow-blue-950/50 ring-1 ring-white/10 p-8 md:p-10">
             <form action="" method="POST" @submit="isSubmitting = true" class="space-y-6">
-
                 {% csrf_token %}
 
                 <div>
-                    <label for="nome" class="block text-sm font-semibold text-slate-900 mb-2">Seu Nome</label>
-                    <div>
-                        <input type="text" name="nome" id="nome" required
-                            class="block w-full rounded-lg border-2 border-slate-200 px-4 py-3 shadow-sm focus:border-blue-600 focus:ring-2 focus:ring-blue-600 focus:outline-none transition-all text-slate-900">
-                    </div>
+                    <label for="nome" class="block text-sm font-semibold text-slate-800 mb-2">Seu Nome</label>
+                    <input type="text" name="nome" id="nome" required
+                           placeholder="Ex: João Silva"
+                           class="block w-full rounded-lg border border-slate-200
+                                  px-4 py-3 text-slate-900 placeholder:text-slate-400 text-sm
+                                  bg-slate-50
+                                  focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 focus:outline-none
+                                  transition-all duration-150">
                 </div>
 
                 <div>
-                    <label for="comentario" class="block text-sm font-semibold text-slate-900 mb-2">Seu
-                        Comentário</label>
-                    <div>
-                        <textarea rows="4" name="comentario" id="comentario" required maxlength="900"
-                            class="block w-full rounded-lg border-2 border-slate-200 px-4 py-3 shadow-sm focus:border-blue-600 focus:ring-2 focus:ring-blue-600 focus:outline-none transition-all text-slate-900"></textarea>
-                    </div>
+                    <label for="comentario" class="block text-sm font-semibold text-slate-800 mb-2">Seu Comentário</label>
+                    <textarea rows="4" name="comentario" id="comentario" required maxlength="900"
+                              placeholder="Conte-nos sobre sua experiência no evento..."
+                              class="block w-full rounded-lg border border-slate-200
+                                     px-4 py-3 text-slate-900 placeholder:text-slate-400 text-sm
+                                     bg-slate-50 resize-none
+                                     focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 focus:outline-none
+                                     transition-all duration-150"></textarea>
                 </div>
 
                 <div>
                     <button type="submit" :disabled="isSubmitting"
-                        class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 disabled:opacity-50 transition-all">
-
+                            class="w-full flex justify-center items-center py-3.5 px-4 rounded-lg
+                                   text-sm font-semibold text-white
+                                   bg-blue-700 hover:bg-blue-600
+                                   shadow-lg shadow-blue-700/30 hover:shadow-blue-600/40
+                                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                                   disabled:opacity-50 transition-all duration-200">
                         <svg x-show="isSubmitting" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                            </circle>
+                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                             </path>
                         </svg>
-
                         <span x-show="!isSubmitting">Enviar Comentário</span>
+                        <span x-show="isSubmitting" class="sr-only">Enviando...</span>
                     </button>
                 </div>
             </form>
@@ -51,33 +89,104 @@
     </div>
 </section>
 
-<section class="py-16 px-6 sm:px-8 lg:px-12">
-    <div class="max-w-screen-2xl mx-auto">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
+{# ── COMMENT WALL ── Masonry grid with premium card treatment #}
+<section class="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-slate-50">
+    <div class="max-w-7xl mx-auto">
+
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+                O que a comunidade diz
+            </h2>
+            <div class="mt-5 mb-4 mx-auto w-16 h-1 rounded-full bg-blue-600"></div>
+            <p class="text-slate-600 text-base">Vozes reais de quem viveu o evento.</p>
+        </div>
+
+        {% if page_obj %}
+
+        {# CSS masonry columns layout — break-inside-avoid prevents card splitting #}
+        <div class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
             {% for comment in page_obj %}
 
-            {% if comment.comment_status == 'approved' %}
+            {# Avatar gradient and accent colour cycle through 4 palettes per row position #}
+            {% with forloop.counter0 as i %}
 
-            <div
-                class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl hover:shadow-blue-600/10 transition-all duration-300 border border-slate-100 border-t-4 border-t-blue-600 border-l-2 border-l-blue-600/50 border-r-2 border-r-blue-600/50 border-b-2 border-b-blue-600/50">
-                <h3 class="font-bold text-xl text-slate-900 mb-3">{{ comment.comment_author }}</h3>
-                <p class="text-slate-600 mb-4 leading-relaxed">
-                    {{ comment.comment_text }}
+            <article class="break-inside-avoid group
+                            bg-white rounded-2xl
+                            border border-slate-100 border-t-4
+                            {% if i|divisibleby:4 %}border-t-blue-600
+                            {% elif i|divisibleby:3 %}border-t-blue-800
+                            {% elif i|divisibleby:2 %}border-t-blue-500
+                            {% else %}border-t-blue-700{% endif %}
+                            shadow-sm hover:shadow-xl hover:shadow-blue-600/10
+                            hover:-translate-y-0.5
+                            transition-all duration-300 ease-out
+                            p-6">
+
+                {# Large decorative quotation mark — colour matches the top accent #}
+                <div class="mb-4">
+                    <svg class="w-8 h-8
+                                {% if i|divisibleby:4 %}text-blue-200
+                                {% elif i|divisibleby:3 %}text-blue-200
+                                {% elif i|divisibleby:2 %}text-blue-300
+                                {% else %}text-blue-200{% endif %}"
+                         fill="currentColor" viewBox="0 0 32 32" aria-hidden="true">
+                        <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z"/>
+                    </svg>
+                </div>
+
+                {# Comment body — italic for authenticity, slate-600 for comfortable reading #}
+                <p class="text-slate-600 leading-relaxed text-sm italic mb-6">
+                    &#8220;{{ comment.comment_text }}&#8221;
                 </p>
-                <p class="text-xs text-slate-400 font-medium">
-                    Postado em: {{ comment.created_at }}
-                </p>
-            </div>
 
-            {% endif %}
+                {# Author row: gradient avatar + name + date #}
+                <div class="flex items-center gap-3 pt-4 border-t border-slate-100">
 
+                    {# Gradient avatar with initial — matches the card's top accent colour #}
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm
+                                {% if i|divisibleby:4 %}bg-gradient-to-br from-blue-500 to-blue-700
+                                {% elif i|divisibleby:3 %}bg-gradient-to-br from-blue-700 to-blue-900
+                                {% elif i|divisibleby:2 %}bg-gradient-to-br from-blue-400 to-blue-600
+                                {% else %}bg-gradient-to-br from-blue-600 to-blue-800{% endif %}">
+                        <span class="text-white font-bold text-sm leading-none" aria-hidden="true">
+                            {{ comment.comment_author|first|upper }}
+                        </span>
+                    </div>
+
+                    <div class="min-w-0">
+                        <p class="font-semibold text-slate-900 text-sm truncate">{{ comment.comment_author }}</p>
+                        <p class="text-xs text-slate-400 mt-0.5">{{ comment.created_at|date:"d M, Y" }}</p>
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% endwith %}
             {% endfor %}
         </div>
+
+        <div class="mt-12">
+            {% include 'components/pagination.html' %}
+        </div>
+
+        {% else %}
+
+        {# Empty state — friendly and encouraging #}
+        <div class="text-center py-20">
+            <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-blue-50 flex items-center justify-center">
+                <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-slate-800 mb-2">Ainda não há comentários</h3>
+            <p class="text-slate-500 text-base">Seja o primeiro a compartilhar sua experiência!</p>
+        </div>
+
+        {% endif %}
+
     </div>
 </section>
-
-<div class="mt-12">
-    {% include 'components/pagination.html' %}
-</div>
 
 {% endblock %}
