@@ -1,33 +1,68 @@
 {% extends 'base.html' %}
+{% block meta_description %}<meta name="description" content="Galeria de vídeos da edição {{ edition_name }} do MOBVAP-MOBTEC.">{% endblock meta_description %}
 {% load static %}
 
+{% block title %}Vídeos: {{ edition_name }} - MOBVAP-MOBTEC{% endblock title %}
+
 {% block content %}
-<section class="py-16 px-6 sm:px-8 lg:px-12 bg-gradient-to-b from-slate-50 to-white">
+<section class="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-50 to-white">
     <div class="max-w-7xl mx-auto">
 
-        <div class="text-center mb-12">
+        <div class="text-center mb-12 md:mb-16">
             <h2 class="text-4xl font-extrabold text-slate-900 tracking-tight">Vídeos da Edição: {{ edition_name }}</h2>
             <p class="text-lg text-slate-600 mt-4">Clique em uma miniatura para assistir ao vídeo.</p>
+            <div class="mt-6 mx-auto w-16 h-1 rounded-full bg-blue-600"></div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
 
             {% for video in page_obj %}
-            <a href="{{ video.video_file.url }}" target="_blank"
-                class="group relative block bg-white rounded-xl shadow-lg hover:shadow-2xl hover:shadow-blue-600/10 transition-all duration-300 overflow-hidden border border-slate-100 border-t-4 border-t-blue-600 border-l-2 border-l-blue-600/50 border-r-2 border-r-blue-600/50 border-b-2 border-b-blue-600/50">
+            <div class="group relative rounded-xl overflow-hidden
+                        border border-slate-200 border-t-4 border-t-blue-700
+                        shadow-sm hover:shadow-xl hover:shadow-blue-600/15
+                        transition-all duration-300 bg-slate-900">
 
-                <img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    src="{{ video.thumbnail_display.url }}" alt="{{ video.video_title }}">
+                <a href="{{ video.video_file.url }}"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="Assistir vídeo: {{ video.video_title }}">
 
-                <div
-                    class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                </div>
-            </a>
+                    <div class="aspect-video overflow-hidden">
+                        <img class="w-full h-full object-cover
+                                    transition-transform duration-500 ease-out
+                                    group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                             src="{{ video.thumbnail_display.url }}"
+                             alt="{{ video.video_title }}"
+                             loading="lazy">
+                    </div>
+
+                    {# Play button — always faintly visible, prominent on hover #}
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="bg-black/30 group-hover:bg-black/50
+                                    rounded-full p-4
+                                    ring-2 ring-white/30 group-hover:ring-white/60
+                                    transition-all duration-300
+                                    transform group-hover:scale-110">
+                            <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    {# Title bar — slides up from bottom on hover #}
+                    {% if video.video_title %}
+                    <div class="absolute bottom-0 left-0 right-0
+                                bg-gradient-to-t from-black/80 to-transparent
+                                px-4 py-3
+                                translate-y-full group-hover:translate-y-0
+                                transition-transform duration-300">
+                        <p class="text-white text-sm font-medium truncate">{{ video.video_title }}</p>
+                    </div>
+                    {% endif %}
+
+                </a>
+            </div>
+
             {% empty %}
             <div class="col-span-full text-center py-12">
                 <p class="text-lg text-slate-600">Desculpa, essa edição ainda não possui vídeos.</p>

@@ -1,3 +1,41 @@
 @tailwind base;
+
+@layer base {
+  :root {
+    --dark-navy: #0f172a;
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .ticker-track {
+    animation: ticker 40s linear infinite;
+  }
+  @keyframes ticker {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .ticker-wrapper:hover .ticker-track {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+      animation: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+    .ticker-wrapper {
+      mask-image: none !important;
+      -webkit-mask-image: none !important;
+    }
+  }
+}

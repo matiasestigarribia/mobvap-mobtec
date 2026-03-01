@@ -15,3 +15,10 @@ db.sqlite3
 Dockerfile
 docker-compose.yml
 apt-entity-472912-v8-ed495a2e171a.json
+.claude
+.playwright-mcp
+FRONTEND_REPORT.md
+take-final-screenshots.js
+take-hero-screenshot.js
+take-screenshots.js
+take-screenshots-after.js
