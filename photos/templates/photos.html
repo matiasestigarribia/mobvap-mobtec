@@ -5,10 +5,10 @@
 
 {% block content %}
 
-{# ── HERO HEADER ── Dark, impactful, matches the site's hero language #}
-<section class="relative py-16 md:py-24 px-4 sm:px-6 lg:px-8
-                bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900
-                overflow-hidden">
+{# ── DARK HERO HEADER ── Matches pattern from home.html and comments.html #}
+<section class="relative py-20 md:py-28 px-4 sm:px-6 lg:px-8
+               bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900
+               overflow-hidden">
 
     {# Decorative grid overlay #}
     <div class="absolute inset-0 opacity-5 pointer-events-none"
@@ -17,37 +17,39 @@
                 background-size: 40px 40px;">
     </div>
 
-    <div class="relative max-w-4xl mx-auto text-center">
+    <div class="relative max-w-3xl mx-auto text-center">
+
+        {# Dark-variant badge with camera icon #}
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full
                     bg-blue-500/20 border border-blue-400/30
-                    text-blue-300 text-xs font-semibold tracking-widest uppercase mb-6">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    text-blue-300 text-xs font-semibold tracking-widest uppercase mb-5">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
             Galeria de Fotos
         </div>
+
         <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight mb-4">
             Edição: {{ edition_name }}
         </h1>
-        <p class="text-slate-300 text-lg">
+
+        <div class="mt-5 mb-5 mx-auto w-16 h-1 rounded-full bg-blue-500/60"></div>
+
+        <p class="text-slate-300 text-base leading-relaxed max-w-md mx-auto">
             Momentos que ficaram registrados para sempre.
         </p>
-    </div>
 
+    </div>
 </section>
 
-{# ── PHOTO GRID ── Full-bleed dark background for maximum visual impact #}
-<section class="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-slate-900">
+{# ── PHOTO GRID ── Responsive grid + empty state + pagination #}
+<section class="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-slate-50">
     <div class="max-w-7xl mx-auto">
 
         {% if photos %}
 
-        {#
-            Responsive auto-fill grid: tightly packed on mobile,
-            expanding to 4 columns on desktop. Each photo is a
-            clickable card with scale + overlay hover effects.
-        #}
+        {# Responsive grid: 1 col mobile → 2 tablet → 3 md → 4 desktop #}
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
 
             {% for photo in photos %}
@@ -56,12 +58,11 @@
                rel="noopener noreferrer"
                aria-label="Abrir foto: {{ photo.image_title }} em tela cheia"
                class="group relative block rounded-xl overflow-hidden
-                      bg-slate-800
-                      shadow-lg shadow-black/40
-                      ring-1 ring-white/5
-                      hover:ring-blue-500/50 hover:shadow-blue-500/20 hover:shadow-2xl
-                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900
-                      transition-all duration-400 ease-out">
+                      bg-slate-900
+                      border border-slate-200 border-t-4 border-t-blue-700
+                      shadow-sm hover:shadow-xl hover:shadow-blue-600/15
+                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white
+                      transition-all duration-300 ease-out">
 
                 {# 4:3 aspect ratio container for visual consistency #}
                 <div class="aspect-[4/3] overflow-hidden">
@@ -77,7 +78,7 @@
                 <div class="absolute inset-0
                             bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent
                             opacity-60 group-hover:opacity-90
-                            transition-opacity duration-400"></div>
+                            transition-opacity duration-300"></div>
 
                 {# Expand icon — appears from center on hover #}
                 <div class="absolute inset-0 flex items-center justify-center
@@ -87,7 +88,7 @@
                                 ring-1 ring-white/30
                                 transform scale-75 group-hover:scale-100
                                 transition-transform duration-300">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
                         </svg>
@@ -116,25 +117,42 @@
             {% include 'components/pagination.html' %}
         </div>
 
+        <div class="mt-8 text-center">
+            <a href="{% url 'editions-list' %}"
+               class="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg
+                      bg-blue-700 hover:bg-blue-600
+                      text-white font-semibold text-sm
+                      shadow-lg shadow-blue-900/40 hover:shadow-blue-700/40
+                      transition-all duration-200">
+                Voltar a Edições
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+
         {% else %}
 
-        {# ── EMPTY STATE ── Visually polished, not a sad blank page #}
-        <div class="text-center py-24">
-            <div class="w-20 h-20 mx-auto mb-6 rounded-full
-                        bg-white/5 ring-1 ring-white/10
+        {# ── EMPTY STATE ── Polished, on-brand, light theme #}
+        <div class="text-center py-20">
+            <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-blue-50
+                        border border-blue-100
                         flex items-center justify-center">
-                <svg class="w-10 h-10 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                     aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                           d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
             </div>
-            <h3 class="text-xl font-bold text-slate-300 mb-2">Nenhuma foto disponível</h3>
-            <p class="text-slate-500 text-base">As fotos desta edição ainda não foram adicionadas.</p>
+            <h2 class="text-2xl font-bold text-slate-800 mb-3">Nenhuma foto disponível</h2>
+            <p class="text-slate-500 text-base max-w-sm mx-auto leading-relaxed">
+                As fotos desta edição ainda não foram adicionadas. Volte em breve para conferir a galeria completa.
+            </p>
             <a href="{% url 'editions-list' %}"
                class="inline-flex items-center gap-2 mt-8 px-6 py-3 rounded-lg
-                      bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm
-                      transition-colors duration-200">
-                <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      bg-blue-700 hover:bg-blue-600 text-white font-semibold text-sm
+                      shadow-sm transition-colors duration-200">
+                <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
                 Ver todas as edições
