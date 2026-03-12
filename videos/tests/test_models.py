@@ -48,6 +48,17 @@ class VideoModelTest(TestCase):
         self.assertIn('thumb.jpg', video.video_thumbnail.name)
     
     @patch('videos.models.process_video')
+    def test_str_returns_video_title(self, mock_process_video):
+        """Video.__str__ returns the video_title."""
+        mock_process_video.return_value = (self.uploaded_video, SimpleUploadedFile('t.jpg', b''))
+        video = Video.objects.create(
+            video_title="My Str Video",
+            video_file=self.uploaded_video,
+            edition=self.edition
+        )
+        self.assertEqual(str(video), "My Str Video")
+
+    @patch('videos.models.process_video')
     def test_protect_edition_deletion(self, mock_process_video):
         mock_process_video.return_value = (self.uploaded_video, SimpleUploadedFile('t.jpg', b''))
     

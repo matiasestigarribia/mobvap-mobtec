@@ -1,0 +1,140 @@
+name: Django CD
+
+# This workflow runs ONLY on direct pushes to main (i.e. after a PR is merged).
+# Branch protection rules on main require the Django CI workflow (lint + tests)
+# to pass before a merge is permitted, so by the time this workflow fires,
+# the code has already been vetted by CI. There is no need to re-run tests here.
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  # ---------------------------------------------------------------------------
+  # Job: Deploy
+  # SSHs into the remote VM, pulls the latest code, rebuilds Docker images,
+  # runs post-deploy management commands, validates via health check, and
+  # automatically rolls back to the previous commit if the health check fails.
+  # ---------------------------------------------------------------------------
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # -----------------------------------------------------------------------
+      # Step 1: Check out the repository.
+      # Required so that ${{ github.sha }} and other git context are available.
+      # -----------------------------------------------------------------------
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # -----------------------------------------------------------------------
+      # Step 2: Announce the deployment.
+      # -----------------------------------------------------------------------
+      - name: Announce deploy start
+        run: |
+          echo "Starting deployment of commit ${{ github.sha }} to production."
+
+      # -----------------------------------------------------------------------
+      # Step 3: Deploy with automatic rollback.
+      #
+      # Strategy:
+      #   a) Save the current stable SHA before pulling new code.
+      #   b) Pull, rebuild, migrate, collectstatic.
+      #   c) Wait up to 120 seconds, then curl /health/ up to 5 times.
+      #   d) If health check fails → restore previous SHA, rebuild, done.
+      #   e) If health check passes → deployment confirmed successful.
+      #
+      # The -T flag on `docker compose exec` suppresses TTY allocation,
+      # which is required in non-interactive CI environments.
+      # -----------------------------------------------------------------------
+      - name: Deploy to production VM (with rollback)
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          # Increase timeout: build + migrate + collectstatic can take 2-3 min.
+          command_timeout: 10m
+          script: |
+            set -e
+            cd ${{ secrets.VM_PROJECT_DIR }}
+
+            # ------------------------------------------------------------------
+            # [1/6] Save the current stable commit so we can roll back to it.
+            # ------------------------------------------------------------------
+            PREV_SHA=$(git rev-parse HEAD)
+            echo "Current stable SHA: $PREV_SHA"
+            echo "Deploying new SHA:  ${{ github.sha }}"
+
+            # ------------------------------------------------------------------
+            # [2/6] Pull latest code.
+            # ------------------------------------------------------------------
+            echo "--- [2/6] Pulling latest code from main ---"
+            git pull origin main
+
+            # ------------------------------------------------------------------
+            # [3/6] Rebuild and restart containers.
+            # ------------------------------------------------------------------
+            echo "--- [3/6] Rebuilding and restarting containers ---"
+            docker compose up --build -d
+
+            # ------------------------------------------------------------------
+            # [4/6] Run post-deploy management commands.
+            # ------------------------------------------------------------------
+            echo "--- [4/6] Running migrate and collectstatic ---"
+            docker compose exec -T web python manage.py migrate --noinput
+            docker compose exec -T web python manage.py collectstatic --noinput
+
+            # ------------------------------------------------------------------
+            # [5/6] Health check: wait 30s for the app to warm up, then curl
+            # /health/ up to 5 times with 15s between attempts (2 min total).
+            # ------------------------------------------------------------------
+            echo "--- [5/6] Health check (waiting 30s for app to warm up) ---"
+            sleep 30
+
+            HEALTH_URL="http://localhost:8000/health/"
+            ATTEMPTS=5
+            HEALTHY=false
+
+            for i in $(seq 1 $ATTEMPTS); do
+              echo "  Attempt $i/$ATTEMPTS — curling $HEALTH_URL"
+              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$HEALTH_URL" || echo "000")
+              echo "  HTTP response: $HTTP_CODE"
+              if [ "$HTTP_CODE" = "200" ]; then
+                HEALTHY=true
+                break
+              fi
+              if [ "$i" -lt "$ATTEMPTS" ]; then
+                echo "  Not healthy yet, waiting 15s before next attempt..."
+                sleep 15
+              fi
+            done
+
+            # ------------------------------------------------------------------
+            # [6/6] Rollback if health check failed, confirm if it passed.
+            # ------------------------------------------------------------------
+            if [ "$HEALTHY" = "false" ]; then
+              echo ""
+              echo "!!! HEALTH CHECK FAILED after $ATTEMPTS attempts. Rolling back to $PREV_SHA !!!"
+              echo ""
+
+              git checkout "$PREV_SHA"
+              docker compose up --build -d
+              docker compose exec -T web python manage.py migrate --noinput
+              docker compose exec -T web python manage.py collectstatic --noinput
+
+              echo "Rollback to $PREV_SHA complete."
+              # Exit non-zero so GitHub marks this workflow run as failed.
+              exit 1
+            fi
+
+            echo "--- [6/6] Health check passed. Deployment of ${{ github.sha }} is live. ---"
+
+      # -----------------------------------------------------------------------
+      # Step 4: Confirm successful deployment (only runs if step 3 succeeded).
+      # -----------------------------------------------------------------------
+      - name: Announce deploy success
+        run: |
+          echo "Deployment of commit ${{ github.sha }} completed successfully."
