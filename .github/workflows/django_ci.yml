@@ -16,9 +16,6 @@ jobs:
   lint:
     runs-on: ubuntu-latest
 
-    env:
-      PIP_NO_CACHE_DIR: 1
-
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -53,7 +50,6 @@ jobs:
     needs: lint
 
     env:
-      PIP_NO_CACHE_DIR: 1
       # Django runtime settings required by the test suite.
       DJANGO_ENV: dev
       DEBUG: True
