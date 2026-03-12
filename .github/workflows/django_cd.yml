@@ -101,14 +101,7 @@ jobs:
 
             for i in $(seq 1 $ATTEMPTS); do
               echo "  Attempt $i/$ATTEMPTS — checking http://localhost:8000/health/ inside web container"
-              HTTP_CODE=$(docker compose exec -T web python -c "
-import urllib.request, sys
-try:
-    r = urllib.request.urlopen('http://localhost:8000/health/', timeout=10)
-    print(r.getcode())
-except Exception as e:
-    print('000')
-" 2>/dev/null || echo "000")
+              HTTP_CODE=$(docker compose exec -T web python -c "import urllib.request; r = urllib.request.urlopen('http://localhost:8000/health/', timeout=10); print(r.getcode())" 2>/dev/null || echo "000")
               echo "  HTTP response: $HTTP_CODE"
               if [ "$HTTP_CODE" = "200" ]; then
                 HEALTHY=true
