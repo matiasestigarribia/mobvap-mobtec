@@ -1,6 +1,6 @@
 name: Django CI
 
-# Quando esse robô deve trabalhar?
+# Trigger on pushes and pull requests targeting main.
 on:
   push:
     branches: [ "main" ]
@@ -8,35 +8,83 @@ on:
     branches: [ "main" ]
 
 jobs:
-  test:
+
+  # ---------------------------------------------------------------------------
+  # Job 1: Lint
+  # Runs flake8 across the project. The test job depends on this passing first.
+  # ---------------------------------------------------------------------------
+  lint:
     runs-on: ubuntu-latest
-    
-    # Define variáveis de ambiente para o teste não reclamar
-    env:
-      DJANGO_ENV: dev
-      DEBUG: True
-      SECRET_KEY: 'django-insecure-test-key-github-actions'
-      CONTENT_SAFETY_KEY: 'dummy-key-for-ci-only'
-      CONTENT_SAFETY_ENDPOINT: 'https://dummy-endpoint.azure.com'
-    
 
     steps:
-    # 1. Baixa seu código
-    - uses: actions/checkout@v3
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-    # 2. Instala o Python
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.11"
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
 
-    # 3. Instala as bibliotecas
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      # flake8 is listed in requirements_for_dev.txt, so install dev deps only.
+      - name: Install dev dependencies (flake8)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements_for_dev.txt
 
-    # 4. Roda os Testes (O Grande Momento)
-    - name: Run Tests
-      run: |
-        python manage.py test
+      # Inline flake8 config via CLI flags — no setup.cfg / pyproject.toml used.
+      # Excluded paths: generated/vendor directories that should not be linted.
+      - name: Lint with flake8
+        run: |
+          flake8 . \
+            --max-line-length=120 \
+            --extend-ignore=W503 \
+            --exclude=venv,migrations,node_modules,staticfiles,__pycache__,.github
+
+  # ---------------------------------------------------------------------------
+  # Job 2: Test
+  # Runs the full pytest suite with per-app coverage reporting.
+  # Only starts after the lint job succeeds.
+  # ---------------------------------------------------------------------------
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
+
+    env:
+      # Django runtime settings required by the test suite.
+      DJANGO_ENV: dev
+      DEBUG: True
+      SECRET_KEY: "django-insecure-test-key-github-actions"
+      CONTENT_SAFETY_KEY: "dummy-key-for-ci-only"
+      CONTENT_SAFETY_ENDPOINT: "https://dummy-endpoint.azure.com"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      # Install production deps first, then dev deps (pytest, factory-boy, etc.).
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements_for_dev.txt
+
+      # Run the full suite including integration-marked tests (all external
+      # services are mocked via the responses / unittest.mock libraries).
+      # Coverage is reported per app with missing-line detail.
+      - name: Run tests with pytest
+        run: |
+          pytest \
+            --cov=comments \
+            --cov=editions \
+            --cov=photos \
+            --cov=videos \
+            --cov=homepagecontents \
+            --cov=rulespagecontents \
+            --cov-report=term-missing

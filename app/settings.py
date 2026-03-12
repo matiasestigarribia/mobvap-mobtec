@@ -21,27 +21,25 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 if ENVIRONMENT == 'prd':
     allowed_hosts_env = os.getenv('ALLOWED_HOSTS', '')
     ALLOWED_HOSTS = allowed_hosts_env.split(',') if allowed_hosts_env else []
-    
+
     csrf_trusted_origins_env = os.getenv('CSRF_TRUSTED_ORIGINS', '')
     CSRF_TRUSTED_ORIGINS = csrf_trusted_origins_env.split(',') if csrf_trusted_origins_env else []
-    
+
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = True
-    
+
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 else:
     ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1', '[::1]']
-    
+
     CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
 
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
     SECURE_SSL_REDIRECT = False
-    
+
     SECURE_PROXY_SSL_HEADER = None
-
-
 
 
 # Application definition
@@ -115,8 +113,8 @@ else:
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
             'OPTIONS': {
-            'timeout': 20, 
-        },
+                'timeout': 20,
+            },
         }
     }
 
@@ -139,7 +137,7 @@ if ENVIRONMENT == 'prd':
         'crc32c': None,  # This disables the client-side check that is causing the error
     }
 
-    
+
 else:
     STORAGES = {
         "default": {

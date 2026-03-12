@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.http import JsonResponse
 from homepagecontents.views import HomePageView
 from rulespagecontents.views import RulesPageView
 from editions.views import EditionPageView
@@ -9,8 +10,14 @@ from comments.views import CommentPageView
 from photos.views import PhotoListView
 from videos.views import VideoListView
 
+
+def health_check(request):
+    return JsonResponse({"status": "ok"})
+
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("health/", health_check, name="health-check"),
 
     path('api/v1/', include('editions.urls')),
     path('api/v1/', include('homepagecontents.urls')),

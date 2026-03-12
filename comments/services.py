@@ -38,14 +38,15 @@ def get_azure_analysis(comment_text):
         logger.info("Azure API call successful")
 
         return response
-    
+
     except HttpResponseError as e:
         logger.error(f'Error while analizing text: {e.error_message}')
         return None
     except Exception as e:
         logger.error(f'Unpexpected error in Azure service: {str(e)}', exc_info=True)
         return None
-        
+
+
 def classify_comment(analysis_data):
     if not analysis_data:
         logger.warning("Classification failed: No analysis data received")

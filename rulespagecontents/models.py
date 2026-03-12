@@ -5,13 +5,13 @@ class RulesPageContent(models.Model):
     rules_title = models.CharField(max_length=200)
     rules_text = models.TextField()
     pdf_file_mobvap = models.FileField(
-        upload_to='rules/pdfs/', 
-        null=True, 
+        upload_to='rules/pdfs/',
+        null=True,
         blank=True
     )
     pdf_file_mobtec = models.FileField(
-        upload_to='rules/pdfs/', 
-        null=True, 
+        upload_to='rules/pdfs/',
+        null=True,
         blank=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
