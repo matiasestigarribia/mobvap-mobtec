@@ -71,8 +71,9 @@ jobs:
             # ------------------------------------------------------------------
             # [2/6] Pull latest code.
             # ------------------------------------------------------------------
-            echo "--- [2/6] Pulling latest code from main ---"
-            git pull origin main
+            echo "--- [2/6] Fetching latest code from main ---"
+            git fetch origin main
+            git reset --hard origin/main
 
             # ------------------------------------------------------------------
             # [3/6] Rebuild and restart containers.
@@ -121,7 +122,7 @@ jobs:
               echo "!!! HEALTH CHECK FAILED after $ATTEMPTS attempts. Rolling back to $PREV_SHA !!!"
               echo ""
 
-              git checkout "$PREV_SHA"
+              git reset --hard "$PREV_SHA"
               docker compose up --build -d
               docker compose exec -T web python manage.py migrate --noinput
               docker compose exec -T web python manage.py collectstatic --noinput
