@@ -88,27 +88,28 @@ jobs:
             docker compose exec -T web python manage.py collectstatic --noinput
 
             # ------------------------------------------------------------------
-            # [5/6] Health check: wait 30s for the app to warm up, then curl
-            # /health/ up to 5 times with 15s between attempts (2 min total).
+            # [5/6] Health check: wait 10s then hit /health/ from inside the
+            # web container (port 8000 is not exposed to the host — only nginx
+            # exposes 80/443). Uses `docker compose exec -T web` to run curl
+            # inside the container where Gunicorn is listening.
             # ------------------------------------------------------------------
-            echo "--- [5/6] Health check (waiting 30s for app to warm up) ---"
-            sleep 30
+            echo "--- [5/6] Health check (waiting 10s for app to warm up) ---"
+            sleep 10
 
-            HEALTH_URL="http://localhost:8000/health/"
             ATTEMPTS=5
             HEALTHY=false
 
             for i in $(seq 1 $ATTEMPTS); do
-              echo "  Attempt $i/$ATTEMPTS — curling $HEALTH_URL"
-              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$HEALTH_URL" || echo "000")
+              echo "  Attempt $i/$ATTEMPTS — curling http://localhost:8000/health/ inside web container"
+              HTTP_CODE=$(docker compose exec -T web curl -s -o /dev/null -w "%{http_code}" --max-time 10 http://localhost:8000/health/ || echo "000")
               echo "  HTTP response: $HTTP_CODE"
               if [ "$HTTP_CODE" = "200" ]; then
                 HEALTHY=true
                 break
               fi
               if [ "$i" -lt "$ATTEMPTS" ]; then
-                echo "  Not healthy yet, waiting 15s before next attempt..."
-                sleep 15
+                echo "  Not healthy yet, waiting 10s before next attempt..."
+                sleep 10
               fi
             done
 
