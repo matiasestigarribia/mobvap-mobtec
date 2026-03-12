@@ -5,11 +5,23 @@
 # Python
 __pycache__/
 *.pyc
+*.pyo
 venv/
 .env
 
 # Database
 db.sqlite3
+
+# Node / frontend build
+node_modules/
+
+# Django collected static and user media (managed via volumes)
+staticfiles/
+media/
+
+# Test artifacts
+.coverage
+htmlcov/
 
 # Docker
 Dockerfile
@@ -22,4 +34,3 @@ take-final-screenshots.js
 take-hero-screenshot.js
 take-screenshots.js
 take-screenshots-after.js
-.coverage
