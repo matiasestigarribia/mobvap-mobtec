@@ -21,6 +21,7 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 if ENVIRONMENT == 'prd':
     allowed_hosts_env = os.getenv('ALLOWED_HOSTS', '')
     ALLOWED_HOSTS = allowed_hosts_env.split(',') if allowed_hosts_env else []
+    ALLOWED_HOSTS += ['127.0.0.1', 'localhost']  # required for internal health checks
 
     csrf_trusted_origins_env = os.getenv('CSRF_TRUSTED_ORIGINS', '')
     CSRF_TRUSTED_ORIGINS = csrf_trusted_origins_env.split(',') if csrf_trusted_origins_env else []
