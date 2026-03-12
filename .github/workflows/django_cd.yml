@@ -89,9 +89,9 @@ jobs:
 
             # ------------------------------------------------------------------
             # [5/6] Health check: wait 10s then hit /health/ from inside the
-            # web container (port 8000 is not exposed to the host — only nginx
-            # exposes 80/443). Uses `docker compose exec -T web` to run curl
-            # inside the container where Gunicorn is listening.
+            # web container using Python urllib (always available, no curl
+            # dependency). Port 8000 is not exposed to the host — only nginx
+            # exposes 80/443, so we exec into the container to reach Gunicorn.
             # ------------------------------------------------------------------
             echo "--- [5/6] Health check (waiting 10s for app to warm up) ---"
             sleep 10
@@ -100,8 +100,15 @@ jobs:
             HEALTHY=false
 
             for i in $(seq 1 $ATTEMPTS); do
-              echo "  Attempt $i/$ATTEMPTS — curling http://localhost:8000/health/ inside web container"
-              HTTP_CODE=$(docker compose exec -T web curl -s -o /dev/null -w "%{http_code}" --max-time 10 http://localhost:8000/health/ || echo "000")
+              echo "  Attempt $i/$ATTEMPTS — checking http://localhost:8000/health/ inside web container"
+              HTTP_CODE=$(docker compose exec -T web python -c "
+import urllib.request, sys
+try:
+    r = urllib.request.urlopen('http://localhost:8000/health/', timeout=10)
+    print(r.getcode())
+except Exception as e:
+    print('000')
+" 2>/dev/null || echo "000")
               echo "  HTTP response: $HTTP_CODE"
               if [ "$HTTP_CODE" = "200" ]; then
                 HEALTHY=true
