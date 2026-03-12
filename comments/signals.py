@@ -7,6 +7,7 @@ from .services import moderate_comment
 
 logger = logging.getLogger(__name__)
 
+
 @receiver(post_save, sender=Comment)
 def moderate_comment_on_save(sender, instance, created, **kwargs):
     if created:

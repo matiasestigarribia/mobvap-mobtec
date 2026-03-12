@@ -7,14 +7,15 @@ from editions.models import Edition
 
 MEDIA_ROOT_TEST = tempfile.mkdtemp()
 
+
 @override_settings(MEDIA_ROOT=MEDIA_ROOT_TEST)
 class EditionModelTest(TestCase):
-    
+
     @classmethod
     def tearDowndClass(cls):
         shutil.rmtree(MEDIA_ROOT_TEST, ignore_errors=True)
         super().tearDownClass()
-        
+
     def setUp(self):
         self.image_content = (
             b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x05\x04\x04'
@@ -25,8 +26,8 @@ class EditionModelTest(TestCase):
             name='test_image.gif',
             content=self.image_content,
             content_type='image/gif'
-        ) 
-    
+        )
+
     def test_slug_automation(self):
         edition = Edition.objects.create(
             edition_name='eDiCao tESte 2026',
@@ -35,7 +36,7 @@ class EditionModelTest(TestCase):
             preview_image2=self.uploaded_image
         )
         self.assertEqual(edition.slug, "edicao-teste-2026")
-    
+
     def test_image_processing(self):
         edition = Edition.objects.create(
             edition_name="Foto Teste",
@@ -43,12 +44,12 @@ class EditionModelTest(TestCase):
             preview_image1=self.uploaded_image,
             preview_image2=self.uploaded_image
         )
-        
+
         self.assertTrue(edition.preview_image1.name)
         self.assertTrue(edition.preview_image1.size > 0)
         self.assertTrue(edition.preview_image2.name)
         self.assertTrue(edition.preview_image2.size > 0)
-    
+
     def test_unique_slug_constraint(self):
         Edition.objects.create(
             edition_name='Mesmo Nome',

@@ -26,7 +26,6 @@ class Video(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk is None and self.video_file:
-            
 
             processed_video_file, thumbnail_file = process_video(self.video_file)
 

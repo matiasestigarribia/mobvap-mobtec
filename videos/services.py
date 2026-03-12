@@ -23,7 +23,7 @@ def process_video(uploaded_file):
     os.remove(temp_path)
     if thumbnail_path and os.path.exists(thumbnail_path):
         os.remove(thumbnail_path)
-        
+
     return uploaded_file, thumbnail_file
 
 

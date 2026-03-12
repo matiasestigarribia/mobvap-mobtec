@@ -13,7 +13,7 @@ from tests.conftest import EditionFactory, PhotoFactory
 class PhotoViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
-        
+
         self.edition = Edition.objects.create(
             edition_name="Edition View",
             edition_description="Desc"
@@ -23,18 +23,18 @@ class PhotoViewTest(TestCase):
             edition=self.edition,
             image_file='path/false/photo.jpg'
         )
-        
+
         self.list_url = f'/api/v1/editions/{self.edition.slug}/photos/'
-    
+
     def test_list_photos_success(self):
         response = self.client.get(self.list_url)
-        
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         if 'results' in response.data:
             self.assertEqual(len(response.data['results']), 1)
         else:
             self.assertEqual(len(response.data), 1)
-    
+
     def test_create_photo_forbidden(self):
         data = {'image_title': 'Hacker Photo'}
         response = self.client.post(self.list_url, data)
