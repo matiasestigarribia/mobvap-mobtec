@@ -19,11 +19,9 @@ All ffmpeg calls, tempfile operations, and os.path.exists / os.remove calls
 are mocked so tests run without ffmpeg installed and without touching disk.
 """
 
-import os
 from io import BytesIO
 from unittest.mock import MagicMock, call, patch
 
-import pytest
 from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
 

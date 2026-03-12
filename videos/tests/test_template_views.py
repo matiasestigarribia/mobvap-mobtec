@@ -23,9 +23,9 @@ Implementation notes:
 import io
 import pytest
 from PIL import Image
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
-from django.test import Client, override_settings
+from django.test import Client
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from editions.models import Edition

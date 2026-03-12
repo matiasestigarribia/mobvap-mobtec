@@ -1,6 +1,6 @@
 import shutil
 import tempfile
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from django.test import TestCase, override_settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models import ProtectedError
