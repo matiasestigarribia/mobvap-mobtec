@@ -2,7 +2,6 @@ import shutil
 import tempfile
 from django.test import TestCase, override_settings
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.contrib.auth.models import User
 from editions.models import Edition
 
 MEDIA_ROOT_TEST = tempfile.mkdtemp()

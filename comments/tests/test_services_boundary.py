@@ -8,7 +8,6 @@ exception-handling paths inside get_azure_analysis.
 
 from unittest.mock import MagicMock, patch
 
-import pytest
 from django.test import TestCase
 
 from comments.services import classify_comment, get_azure_analysis

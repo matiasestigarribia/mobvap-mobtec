@@ -7,7 +7,6 @@ Tests for rulespagecontents views:
 import pytest
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APIClient
 
 from rulespagecontents.models import RulesPageContent
 from tests.conftest import RulesPageContentFactory

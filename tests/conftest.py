@@ -6,7 +6,7 @@ External services (GCS, Azure AI, ffmpeg) must always be mocked — never hit re
 """
 
 import io
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import factory
 import pytest

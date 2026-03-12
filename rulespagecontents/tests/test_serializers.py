@@ -4,7 +4,6 @@ Tests for rulespagecontents.serializers.RulesPageContentSerializer.
 
 import pytest
 
-from rulespagecontents.models import RulesPageContent
 from rulespagecontents.serializers import RulesPageContentSerializer
 from tests.conftest import RulesPageContentFactory
 
