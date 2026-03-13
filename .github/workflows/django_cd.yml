@@ -42,9 +42,15 @@ jobs:
       # Strategy:
       #   a) Save the current stable SHA before pulling new code.
       #   b) Pull, rebuild, migrate, collectstatic.
-      #   c) Wait up to 120 seconds, then curl /health/ up to 5 times.
-      #   d) If health check fails → restore previous SHA, rebuild, done.
-      #   e) If health check passes → deployment confirmed successful.
+      #   c) Print Gunicorn logs, then wait up to 60s hitting /health/ 5 times.
+      #   d) If health check fails -> dump logs, restore previous SHA, rebuild.
+      #   e) If health check passes -> prune unused images, confirm success.
+      #
+      # Health check approach:
+      #   Port 8000 is NOT exposed to the VM host. We exec into the web
+      #   container and pipe a Python script via stdin to urllib — this avoids
+      #   ALL shell quoting issues with single-quoted Python -c strings and
+      #   ensures errors are printed (not suppressed) for CI visibility.
       #
       # The -T flag on `docker compose exec` suppresses TTY allocation,
       # which is required in non-interactive CI environments.
@@ -90,20 +96,30 @@ jobs:
             docker compose exec -T web python manage.py collectstatic --noinput
 
             # ------------------------------------------------------------------
-            # [5/6] Health check: wait 10s then hit /health/ from inside the
-            # web container using Python urllib (always available, no curl
-            # dependency). Port 8000 is not exposed to the host — only nginx
-            # exposes 80/443, so we exec into the container to reach Gunicorn.
+            # [5/6] Health check.
+            #
+            # Print the last 30 lines of Gunicorn logs before polling so any
+            # startup errors are visible in the CI log even if the check fails.
+            #
+            # The Python script is piped via stdin to avoid single-quote
+            # conflicts inside the shell heredoc/script block. stderr is kept
+            # open (no 2>/dev/null) so urllib exceptions are captured and
+            # printed to CI output for diagnosis. tail -1 extracts only the
+            # last line, which is either "200" or an "ERR: ..." message.
             # ------------------------------------------------------------------
             echo "--- [5/6] Health check (waiting 10s for app to warm up) ---"
+            echo "--- Gunicorn startup logs (last 30 lines) ---"
+            docker compose logs web --tail=30
+            echo "--- End of startup logs ---"
             sleep 10
 
             ATTEMPTS=5
             HEALTHY=false
 
+            set +e
             for i in $(seq 1 $ATTEMPTS); do
               echo "  Attempt $i/$ATTEMPTS — checking http://localhost:8000/health/ inside web container"
-              HTTP_CODE=$(docker compose exec -T web python -c "import urllib.request; r = urllib.request.urlopen('http://localhost:8000/health/', timeout=10); print(r.getcode())" 2>/dev/null || echo "000")
+              HTTP_CODE=$(printf 'import urllib.request\ntry:\n    r=urllib.request.urlopen("http://localhost:8000/health/",timeout=10)\n    print(r.getcode())\nexcept Exception as e:\n    print("ERR:", e)\n' | docker compose exec -T web python3 2>&1 | tail -1)
               echo "  HTTP response: $HTTP_CODE"
               if [ "$HTTP_CODE" = "200" ]; then
                 HEALTHY=true
@@ -114,6 +130,7 @@ jobs:
                 sleep 10
               fi
             done
+            set -e
 
             # ------------------------------------------------------------------
             # [6/6] Rollback if health check failed, confirm if it passed.
@@ -122,6 +139,10 @@ jobs:
               echo ""
               echo "!!! HEALTH CHECK FAILED after $ATTEMPTS attempts. Rolling back to $PREV_SHA !!!"
               echo ""
+
+              echo "--- Gunicorn logs at time of failure (last 50 lines) ---"
+              docker compose logs web --tail=50
+              echo "--- End of failure logs ---"
 
               git reset --hard "$PREV_SHA"
               docker compose up --build -d
@@ -134,6 +155,10 @@ jobs:
             fi
 
             echo "--- [6/6] Health check passed. Deployment of ${{ github.sha }} is live. ---"
+
+            # Reclaim disk space from dangling/untagged images left by --no-cache build.
+            echo "--- Pruning unused Docker images ---"
+            docker image prune -f
 
       # -----------------------------------------------------------------------
       # Step 4: Confirm successful deployment (only runs if step 3 succeeded).
